@@ -52,7 +52,7 @@ import random  # Genera números aleatorios --> random.randrange(1,100)
 import glob
 
 #######################################
-    # #             Variables           # #
+# #             Variables           # #
 #######################################
 sleep = time.sleep
 
@@ -66,6 +66,11 @@ pathImg = pathAssets + '/img'
 pathCss = pathAssets + '/css'
 pathJs = pathAssets + '/js'
 
+## Patrones de búsqueda y reemplazo
+patronImagen = ''
+patronEnlace = ''
+patronCss = ''
+
 #######################################
 # #             Funciones           # #
 #######################################
@@ -78,6 +83,7 @@ def buscarArchivos():
     files = [f for f in glob.glob("*.html", recursive=False)]
 
     return files
+
 def convertCss():
     ## Extrae el css del archivo
     pass
@@ -90,24 +96,45 @@ def convertImage():
     ## Extrae las imágene del archivo
     pass
 
-def procesarLinea():
-    ## Añade una nueva línea a un archivo
+def guardarLinea(line, ruta):
     pass
 
-def procesarArchivo(file):
+def procesarLinea(line, fileName):
+    ## Procesa cada línea y cambia su valor si es necesario, luego la guarda
 
-    pass
+    lineFiltered = ''
+
+    if (line):
+        lineFiltered = ''
+    else:
+        lineFiltered = line
+
+    print(line)
+    print(lineFiltered)
+
+    return lineFiltered
+
+def procesarArchivo(fileName):
+    fileOpened = open(fileName, 'r')
+    lines = fileOpened.readlines()
+
+    lineClean = []
+
+    for line in lines:
+        lineClean.append(procesarLinea(line, fileName))
+
+    fileOpened.close()
 
 def main():
     ## Procesa la lógica archivo a archivo y línea a línea
 
-    files = buscarArchivos()
+    fileNames = buscarArchivos()
 
-    if not files:
+    if not fileNames:
         print('No hay Archivos')
         exit()
 
-    for file in files:
-        procesarArchivo(file)
+    for fileName in fileNames:
+        procesarArchivo(fileName)
 
 main()
