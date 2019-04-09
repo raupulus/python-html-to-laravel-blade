@@ -56,6 +56,10 @@ import glob
 #######################################
 sleep = time.sleep
 
+## Rutas de salidas
+htmlFiles = 'htmlBlade'
+pathPublic = 'public'
+
 ## Ruta dentro de public para almacenar las rutas de los assets
 pathAssets = 'assets'
 pathImg = pathAssets + '/img'
@@ -86,8 +90,12 @@ def convertImage():
     ## Extrae las imágene del archivo
     pass
 
-def escribirLínea():
+def procesarLinea():
     ## Añade una nueva línea a un archivo
+    pass
+
+def procesarArchivo(file):
+
     pass
 
 def main():
@@ -100,6 +108,6 @@ def main():
         exit()
 
     for file in files:
-        print(file)
+        procesarArchivo(file)
 
 main()
