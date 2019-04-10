@@ -50,6 +50,7 @@ import os  # Importamos la libreria para comandos de la consola/shell
 import random  # Genera números aleatorios --> random.randrange(1,100)
 # import nombre_libreria as nuevo_nombre_libreria
 import glob
+import re
 
 #######################################
 # #             Variables           # #
@@ -67,14 +68,71 @@ pathCss = pathAssets + '/css'
 pathJs = pathAssets + '/js'
 
 ## Patrones de búsqueda y reemplazo
-patronImagen = ''
-patronEnlace = ''
-patronCss = ''
+patron_imagen = 'ZZZZ'
+patron_enlace = '.*<a.*href'
+patron_css = 'ZZZZ'
+patron_js = 'ZZZ'
 
 #######################################
 # #             Funciones           # #
 #######################################
-def buscarArchivos():
+
+
+def convert_css(line):
+    ## Extrae el css del archivo
+
+    return line
+
+
+def convert_js(line):
+    ## Extrae el Javascript del archivo
+    return line
+
+
+def convertir_enlace(line):
+    print('entra')
+
+    return line
+
+
+def convert_image(line):
+    ## Extrae las imágene del archivo
+    return line
+
+
+def procesar_linea(line):
+    ## Procesa cada línea y cambia su valor si es necesario, luego la devuelve
+
+    line_filtered = ''
+
+    if re.search(patron_imagen, line):
+        line_filtered = convert_image(line)
+    elif re.search(patron_enlace, line):
+        line_filtered = convertir_enlace(line)
+    elif re.search(patron_css, line):
+        line_filtered = line
+    else:
+        line_filtered = line
+
+    print(line_filtered)
+
+    return line_filtered
+
+
+def procesar_archivo(file_name):
+    file_opened = open(file_name, 'r')
+    lines = file_opened.readlines()
+
+    line_clean = []
+
+    for line in lines:
+        line_clean.append(procesar_linea(line))
+
+    ## TODO → Save file
+    file_opened.close()
+
+
+def buscar_archivos():
     ##
     ## Busca todos los archivos html y los devuelve en un array
     ## Devolverá un array vacío en caso de no encontrar ninguno.
@@ -84,57 +142,18 @@ def buscarArchivos():
 
     return files
 
-def convertCss():
-    ## Extrae el css del archivo
-    pass
-
-def convertJs():
-    ## Extrae el Javascript del archivo
-    pass
-
-def convertImage():
-    ## Extrae las imágene del archivo
-    pass
-
-def guardarLinea(line, ruta):
-    pass
-
-def procesarLinea(line, fileName):
-    ## Procesa cada línea y cambia su valor si es necesario, luego la guarda
-
-    lineFiltered = ''
-
-    if (line):
-        lineFiltered = ''
-    else:
-        lineFiltered = line
-
-    print(line)
-    print(lineFiltered)
-
-    return lineFiltered
-
-def procesarArchivo(fileName):
-    fileOpened = open(fileName, 'r')
-    lines = fileOpened.readlines()
-
-    lineClean = []
-
-    for line in lines:
-        lineClean.append(procesarLinea(line, fileName))
-
-    fileOpened.close()
 
 def main():
     ## Procesa la lógica archivo a archivo y línea a línea
 
-    fileNames = buscarArchivos()
+    file_names = buscar_archivos()
 
-    if not fileNames:
+    if not file_names:
         print('No hay Archivos')
         exit()
 
-    for fileName in fileNames:
-        procesarArchivo(fileName)
+    for file_name in file_names:
+        procesar_archivo(file_name)
+
 
 main()
