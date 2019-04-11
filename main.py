@@ -69,7 +69,7 @@ pathJs = pathAssets + '/js'
 
 ## Patrones de búsqueda y reemplazo
 patron_imagen = 'ZZZZ'
-patron_enlace = '.*<a.*href'
+patron_enlace = '.*(<a){1}.*(href="){1}.*("){1}'
 patron_css = 'ZZZZ'
 patron_js = 'ZZZ'
 
@@ -90,9 +90,39 @@ def convert_js(line):
 
 
 def convertir_enlace(line):
-    print('entra')
+    # link = re.sub(('(<a){1}.*(href="){1}.*("){1}',  1)
+    # link = re.search(r'(?<=(<a)\w{0,n}(href="))\w+(")$', line).group(0)
 
-    return line
+    link_slice_start = (re.compile('.*<a.*href="')).search(line)
+    link_start = link_slice_start.span()[1]
+
+    link_slice_fin = (re.compile('.*<a.*href="[^"]*"')).search(line)
+    link_fin = link_slice_fin.span()[1]
+
+    ## Todo → Comprobar que hay líneas obtenidas o meter en tryCatch anteriores
+
+    print(link_slice_fin)
+
+    link = line[link_start:link_fin-1]
+
+
+    ## Todo → Comprobar link:
+    ## Si es http/https no meter en url()
+    ##
+
+
+    ## if ():
+    new_link = 'href="url(/' + link + ')"'
+
+
+    new_line = re.sub('href="[^"]*"', new_link, line)
+
+    print(str(link_start) + ' - ' + str(link_fin))
+    print(link)
+    print(line)
+    print(new_line)
+
+    return new_line
 
 
 def convert_image(line):
@@ -114,7 +144,7 @@ def procesar_linea(line):
     else:
         line_filtered = line
 
-    print(line_filtered)
+    #print(line_filtered)
 
     return line_filtered
 
