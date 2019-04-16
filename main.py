@@ -90,36 +90,33 @@ def convert_js(line):
 
 
 def convertir_enlace(line):
-    # link = re.sub(('(<a){1}.*(href="){1}.*("){1}',  1)
-    # link = re.search(r'(?<=(<a)\w{0,n}(href="))\w+(")$', line).group(0)
+    try:
+        link_slice_start = (re.compile('.*<a.*href="')).search(line)
+        link_start = link_slice_start.span()[1]
 
-    link_slice_start = (re.compile('.*<a.*href="')).search(line)
-    link_start = link_slice_start.span()[1]
+        link_slice_fin = (re.compile('.*<a.*href="[^"]*"')).search(line)
+        link_fin = link_slice_fin.span()[1]
 
-    link_slice_fin = (re.compile('.*<a.*href="[^"]*"')).search(line)
-    link_fin = link_slice_fin.span()[1]
+        link = line[link_start:link_fin-1]
+    except Exception:
+        print('Ha ocurrido un error al convertir enlaces:')
+        print('Línea tratada: ' + line)
+        print('Excepción: ' + Exception)
+        link = '#'
 
-    ## Todo → Comprobar que hay líneas obtenidas o meter en tryCatch anteriores
+    ## Si es http/https no modifica la url, si empieza por // se adapta
+    is_url = re.search('^https?://[a-zA-Z_-]+', link)
+    is_bad_url = re.search('^//[a-zA-Z_-]+', link)
 
-    print(link_slice_fin)
+    if is_url:
+        new_link = 'href="' + link.strip() + '"'
+    elif is_bad_url:
+        new_link = 'href="https:' + link.strip() + '"'
+    else:
+        new_link = 'href="url(' + link.strip() + ')"'
 
-    link = line[link_start:link_fin-1]
+    new_line = re.sub('href="[^"]+"', new_link, line)
 
-
-    ## Todo → Comprobar link:
-    ## Si es http/https no meter en url()
-    ##
-
-
-    ## if ():
-    new_link = 'href="url(/' + link + ')"'
-
-
-    new_line = re.sub('href="[^"]*"', new_link, line)
-
-    print(str(link_start) + ' - ' + str(link_fin))
-    print(link)
-    print(line)
     print(new_line)
 
     return new_line
